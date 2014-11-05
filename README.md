@@ -2,4 +2,6 @@ Perceptron.js
 =============
 
 Run tests:
-    gulp test
+```
+gulp test
+```
