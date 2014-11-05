@@ -1,0 +1,9 @@
+{
+  "name": "perceptron.js",
+  "version": "0.0.1",
+  "dependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jasmine": "^1.0.1",
+    "jasmine": "^2.0.1"
+  }
+}
