@@ -67,4 +67,40 @@ describe("Network", function() {
             expect(output).toEqual(0.0);
         });
     });
+
+    it("initializes weights correctly", function() {
+        network.addInputLayer(3);
+        network.addHiddenLayer(5);
+        network.addOutputLayer(2);
+
+        var wrongArgument = [];
+
+        expect(function () {
+            network.initializeWeights(wrongArgument);
+        }).toThrow();
+
+        var wrongFunction = function() {
+            return {};
+        };
+
+        expect(function () {
+            network.initializeWeights(wrongFunction);
+        }).toThrow();
+
+        var correctFunction = function() {
+            return 0.5;
+        };
+
+        expect(function () {
+            network.initializeWeights(correctFunction);
+        }).not.toThrow();
+
+        network.initializeWeights(correctFunction);
+        network.layers[0].neurons.forEach(function(neuron) {
+            expect(neuron.weights.length).toEqual(3);
+            neuron.weights.forEach(function(weight) {
+                expect(weight).toEqual(0.5);
+            });
+        });
+    });
 });

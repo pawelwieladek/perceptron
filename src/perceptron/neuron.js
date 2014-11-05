@@ -7,4 +7,8 @@ function Neuron(numWeights) {
     }
 }
 
+Neuron.prototype.updateWeight = function(index, weight) {
+    this.weights[index] = weight;
+};
+
 module.exports = Neuron;

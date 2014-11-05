@@ -9,7 +9,7 @@ function Layer(numInputs, numNeurons) {
     }
 
     for(var i = 0; i < numNeurons; i++) {
-        this.neurons.push(new Neuron());
+        this.neurons.push(new Neuron(numInputs));
     }
 }
 

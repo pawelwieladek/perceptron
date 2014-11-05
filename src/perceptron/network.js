@@ -36,4 +36,18 @@ Network.prototype.addOutputLayer = function(size) {
     }
 };
 
+Network.prototype.initializeWeights = function(weightFunction) {
+    if (typeof weightFunction !== "function" || typeof weightFunction() !== "number") {
+        throw new Error("Initialize weight with weight function that returns weight value");
+    }
+
+    this.layers.forEach(function(layer) {
+        layer.neurons.forEach(function(neuron) {
+            for (var i = 0; i < neuron.weights.length; i++) {
+                neuron.updateWeight(i, weightFunction());
+            }
+        });
+    });
+};
+
 module.exports = Network;
