@@ -6,7 +6,13 @@ function Network() {
     this.outputs = [];
 }
 
-Network.prototype.addInputLayer = function(size) {
+Network.prototype.setInputs = function(inputs) {
+    for (var i = 0; i < inputs.length; i++) {
+        this.inputs.push(inputs[i]);
+    }
+};
+
+Network.prototype.setInputSize = function(size) {
     for (var i = 0; i < size; i++) {
         this.inputs.push(0.0);
     }
@@ -43,8 +49,9 @@ Network.prototype.initializeWeights = function(weightFunction) {
 
     this.layers.forEach(function(layer) {
         layer.neurons.forEach(function(neuron) {
+            neuron.bias = weightFunction();
             for (var i = 0; i < neuron.weights.length; i++) {
-                neuron.updateWeight(i, weightFunction());
+                neuron.weights[i] = weightFunction();
             }
         });
     });

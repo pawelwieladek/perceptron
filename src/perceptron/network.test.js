@@ -14,8 +14,8 @@ describe("Network", function() {
         expect(network.outputs.length).toEqual(0);
     });
 
-    it("has input layer", function() {
-        network.addInputLayer(3);
+    it("has input layer initialized with zero", function() {
+        network.setInputSize(3);
 
         expect(network.inputs.length).toEqual(3);
         network.inputs.forEach(function(input) {
@@ -23,12 +23,21 @@ describe("Network", function() {
         });
     });
 
+    it("has input layer initialized with array", function() {
+        var inputs = [1.0, 2.0];
+        network.setInputs(inputs);
+
+        expect(network.inputs.length).toEqual(2);
+        expect(network.inputs[0]).toEqual(1.0);
+        expect(network.inputs[1]).toEqual(2.0);
+    });
+
     it("forbids adding hidden layer without input layer", function() {
         expect(network.addHiddenLayer).toThrow();
     });
 
     it("adds one hidden layer with proper number of inputs and neurons", function() {
-        network.addInputLayer(3);
+        network.setInputSize(3);
         network.addHiddenLayer(5);
 
         expect(network.layers.length).toEqual(1);
@@ -37,7 +46,7 @@ describe("Network", function() {
     });
 
     it("adds more hidden layer with proper number of inputs and neurons", function() {
-        network.addInputLayer(3);
+        network.setInputSize(3);
         network.addHiddenLayer(5);
         network.addHiddenLayer(7);
 
@@ -53,7 +62,7 @@ describe("Network", function() {
     });
 
     it("adds output layer with proper number of inputs and neurons", function() {
-        network.addInputLayer(3);
+        network.setInputSize(3);
         network.addHiddenLayer(5);
         network.addOutputLayer(2);
 
@@ -69,7 +78,7 @@ describe("Network", function() {
     });
 
     it("initializes weights correctly", function() {
-        network.addInputLayer(3);
+        network.setInputSize(3);
         network.addHiddenLayer(5);
         network.addOutputLayer(2);
 
