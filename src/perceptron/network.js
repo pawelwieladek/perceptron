@@ -42,6 +42,12 @@ Network.prototype.addOutputLayer = function(size) {
     }
 };
 
+Network.prototype.updateOutputs = function () {
+    this.outputs = this.layers[this.layers.length - 1].neurons.map(function(neuron) {
+        return neuron.output;
+    });
+};
+
 Network.prototype.initializeWeights = function(weightFunction) {
     if (typeof weightFunction !== "function" || typeof weightFunction() !== "number") {
         throw new Error("Initialize weight with weight function that returns weight value");

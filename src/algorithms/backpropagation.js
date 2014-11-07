@@ -17,9 +17,6 @@ function Backpropagation(config) {
 }
 
 Backpropagation.prototype.learn = function(inputs, outputs) {
-    if (typeof inputs !== "array" || typeof outputs !== "array") {
-        throw new Error("Provide input or output as arrays.");
-    }
     if (inputs.length !== outputs.length) {
         throw new Error("Inputs array must be the same length as outputs array.");
     }
@@ -85,6 +82,7 @@ Backpropagation.prototype.feedForward = function() {
             }
         }
     }
+    this.network.updateOutputs();
 };
 
 Backpropagation.prototype.updateErrorSignal = function(output) {
@@ -95,7 +93,7 @@ Backpropagation.prototype.updateErrorSignal = function(output) {
 
     // Update backwards hidden layers' error signal
     for (var layerId = this.network.layers.length - 2; layerId >= 0; layerId--) {
-        this.updateLayerWithErrorSignal(this.network.layers[layerId], this.calculateHiddenErrorSignal(this.network.layers[layerId], output));
+        this.updateLayerWithErrorSignal(this.network.layers[layerId], this.calculateHiddenErrorSignal(this.network.layers[layerId], this.network.layers[layerId + 1]));
     }
 };
 
