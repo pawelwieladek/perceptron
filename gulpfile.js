@@ -4,6 +4,7 @@ var server = require('gulp-express');
 var browserify = require('browserify');
 var del = require('del');
 var source = require("vinyl-source-stream");
+var less = require("gulp-less");
 
 var paths = {
     app: {
@@ -32,6 +33,12 @@ gulp.task("html", function () {
         .pipe(gulp.dest(paths.app.client.dist));
 });
 
+gulp.task('styles', function () {
+    gulp.src(paths.app.client.src + "/**/*.less")
+        .pipe(less())
+        .pipe(gulp.dest(paths.app.client.dist));
+});
+
 gulp.task("scripts", function () {
     return browserify(paths.app.client.src + "/app.js")
         .bundle()
@@ -39,7 +46,7 @@ gulp.task("scripts", function () {
         .pipe(gulp.dest(paths.app.client.dist))
 });
 
-gulp.task("build", ["html", "scripts"]);
+gulp.task("build", ["html", "styles", "scripts"]);
 
 gulp.task("serve", ["build"], function () {
     //start the server at the beginning of the task
@@ -48,7 +55,8 @@ gulp.task("serve", ["build"], function () {
     });
 
     //restart the server when file changes
-    gulp.watch([paths.app.client.src + "**/*.html"], ["build", server.run]);
-    gulp.watch([paths.app.client.src + "/**/*.js"], ["build", server.run]);
+    gulp.watch([paths.app.client.src + "**/*.html"], ["html", server.run]);
+    gulp.watch([paths.app.client.src + "/**/*.js"], ["scripts", server.run]);
+    gulp.watch([paths.app.client.src + "/**/*.less"], ["styles", server.run]);
     gulp.watch([paths.app.server + "/server.js"], [server.run]);
 });
