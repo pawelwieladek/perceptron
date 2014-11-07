@@ -19,7 +19,7 @@ var paths = {
 };
 
 gulp.task("test", function () {
-    return gulp.src(paths.lib.src + "/*.test.js")
+    return gulp.src(paths.lib.src + "/**/*.test.js")
         .pipe(jasmine());
 });
 
