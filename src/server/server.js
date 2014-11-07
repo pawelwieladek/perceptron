@@ -4,14 +4,15 @@ var path = require("path");
 
 var RegressionProblem = require("../problems/regression");
 
-//app.get('/regression', function (req, res) {
-//    var regression = new RegressionProblem();
-//    regression.solve().done(function(result) {
-//        res.send(result);
-//    });
-//});
+app.get('/regression', function (req, res) {
+    var regression = new RegressionProblem();
+    regression.solve("../resources/regression.train.csv")
+        .then(function(result) {
+            res.send(result);
+        });
+});
 
-app.use(express.static(path.join(__dirname, "../app")));
+app.use(express.static(path.join(__dirname, "../app/dist")));
 
 var server = app.listen(3000, function () {
 

@@ -5,21 +5,14 @@ var Q = require("q");
 function Parser() { }
 
 Parser.parse = function(filepath) {
-    var deferred = Q.defer();
-    fs.readFile(filepath, "utf8", function (error, data) {
-        if (error) {
-            deferred.reject(new Error(error));
-        } else {
-            parse(data, { columns: true }, function(error, output) {
-                if (error) {
-                    deferred.reject(new Error(error));
-                } else {
-                    deferred.resolve(output);
-                }
-            });
-        }
-    });
-    return deferred.promise;
+    return Q.nfcall(fs.readFile, filepath, "utf-8")
+        .then(function(data) {
+            return Q.nfcall(parse, data, { columns: true })
+        })
+        .fail(function (error) {
+            console.log(error);
+            return error;
+        })
 };
 
 module.exports = Parser;

@@ -2,7 +2,9 @@
   "name": "perceptron.js",
   "version": "0.0.1",
   "dependencies": {
+    "browserify": "^6.2.0",
     "csv-parse": "0.0.6",
+    "del": "^0.1.3",
     "express": "^4.10.1",
     "gulp": "^3.8.10",
     "gulp-express": "^0.1.0",
@@ -10,6 +12,8 @@
     "jasmine": "^2.0.1",
     "path": "^0.4.9",
     "q": "^1.0.1",
-    "synchronize": "^0.9.8"
+    "stream-transform": "0.0.6",
+    "synchronize": "^0.9.8",
+    "vinyl-source-stream": "^1.0.0"
   }
 }
