@@ -1,5 +1,8 @@
 require("d3");
 
+// TODO: implement charts
+// Assigned to pawelwieladek
+
 var n = 4, // number of layers
     m = 58, // number of samples per layer
     stack = d3.layout.stack(),
