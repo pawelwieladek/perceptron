@@ -58,5 +58,6 @@ gulp.task("serve", ["build"], function () {
     gulp.watch([paths.app.client.src + "**/*.html"], ["html", server.run]);
     gulp.watch([paths.app.client.src + "/**/*.js"], ["scripts", server.run]);
     gulp.watch([paths.app.client.src + "/**/*.less"], ["styles", server.run]);
+    gulp.watch([paths.lib.src + "/**/*.js"], ["test", server.run]);
     gulp.watch([paths.app.server + "/server.js"], [server.run]);
 });
