@@ -1,4 +1,4 @@
-require("d3");
+var d3 = require("d3");
 
 // TODO: implement charts
 // Assigned to pawelwieladek
