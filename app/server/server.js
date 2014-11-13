@@ -4,11 +4,24 @@ var path = require("path");
 
 // API
 var RegressionProblem = require("../../lib/src/problems/regression");
-app.get('/regression', function (req, res) {
+app.get('/api/regression', function (req, res) {
     var regression = new RegressionProblem();
     regression.solve()
-        .then(function(result) {
-            res.send(result);
+        .then(function(results) {
+            var chart = {
+                key: "Regression",
+                values: []
+            };
+            results.forEach(function(result) {
+                chart.values.push({
+                    series: 0,
+                    shape: "circle",
+                    size: 0.1,
+                    x: result.input,
+                    y: result.output
+                });
+            });
+            res.send([chart]);
         });
 });
 
