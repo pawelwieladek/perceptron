@@ -12,6 +12,10 @@ var paths = {
             src: "./app/client/src",
             dist: "./app/client/dist"
         },
+        bower: {
+            src: "./bower_components",
+            dist: "./app/client/dist/bower_components"
+        },
         server: "./app/server"
     },
     lib: {
@@ -33,6 +37,11 @@ gulp.task("html", function () {
         .pipe(gulp.dest(paths.app.client.dist));
 });
 
+gulp.task("bower", function () {
+    return gulp.src(paths.app.bower.src + "/**")
+        .pipe(gulp.dest(paths.app.bower.dist));
+});
+
 gulp.task('styles', function () {
     gulp.src(paths.app.client.src + "/**/*.less")
         .pipe(less())
@@ -46,7 +55,7 @@ gulp.task("scripts", function () {
         .pipe(gulp.dest(paths.app.client.dist))
 });
 
-gulp.task("build", ["html", "styles", "scripts"]);
+gulp.task("build", ["bower", "html", "styles", "scripts"]);
 
 gulp.task("serve", ["build"], function () {
     //start the server at the beginning of the task
