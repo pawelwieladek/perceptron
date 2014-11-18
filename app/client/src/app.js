@@ -16,27 +16,13 @@ var App = React.createClass({
     },
     handleSubmit: function(formData) {
         this.setState({
-            drawChart: true,
-            learningSet: formData.learningSet,
-            testingSet: formData.testingSet,
-            learningRate: formData.learningRate,
-            momentum: formData.momentum,
-            bipolar: formData.bipolar,
-            bias: formData.bias
+            formData: formData
         });
     },
     render: function() {
         var chart = null;
         if (this.state.drawChart) {
-            chart = <Chart
-                learningSet={this.state.learningSet}
-                testingSet={this.state.testingSet}
-                learningRate={this.state.learningRate}
-                momentum={this.state.momentum}
-                bipolar={this.state.bipolar}
-                bipolar={this.state.bipolar}
-                bias={this.state.bias}
-            />;
+            chart = <Chart formData={this.state.formData} />;
         }
         return (
             <Grid>
@@ -47,7 +33,6 @@ var App = React.createClass({
                 </Row>
                 <Row>
                     <Col md={6}>
-                        <h2>Settings</h2>
                         <Form onSubmit={this.handleSubmit} />
                     </Col>
                     <Col md={6}>

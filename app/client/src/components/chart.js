@@ -15,18 +15,45 @@ var Chart = React.createClass({
             uuid: "chart" + UUID.v4()
         }
     },
-    componentDidMount: function() {
+    getData: function(params) {
+        console.log(params);
         superagent
             .post('/api/perceptron')
-            .send({ learningSet: this.props.learningSet })
+            .send({
+                source: params.source,
+                learningRate: params.learningRate,
+                momentum: params.momentum,
+                bipolar: params.bipolar,
+                bias: params.bias
+            })
+            .type('application/json')
             .end(function(error, res){
                 this.setState({
                     data: res.body
                 })
             }.bind(this));
     },
+    componentDidMount: function() {
+        this.getData(this.props.formData);
+    },
+    componentWillReceiveProps: function(props) {
+        this.getData(props.formData);
+    },
     componentDidUpdate: function() {
-        console.log(this.state.data);
+        var data = this.state.data;
+        var width = $(this.refs.chart.getDOMNode()).width();
+
+        data_graphic({
+            title: this.props.title,
+            data: data,
+            width: width,
+            height: 250,
+            target: "#" + this.state.uuid,
+            x_accessor: "x",
+            y_accessor: "y",
+            interpolate: "basic",
+            area: false
+        });
     },
     render: function() {
         return (

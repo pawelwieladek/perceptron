@@ -2,6 +2,7 @@
   "name": "perceptron.js",
   "version": "0.0.1",
   "dependencies": {
+    "body-parser": "^1.9.2",
     "browserify": "^6.3.2",
     "csv-parse": "0.0.6",
     "d3": "^3.4.13",
