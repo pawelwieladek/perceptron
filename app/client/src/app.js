@@ -9,7 +9,35 @@ var Form = require("./components/form");
 var Chart = require("./components/chart");
 
 var App = React.createClass({
+    getInitialState: function() {
+        return {
+            drawChart: false
+        }
+    },
+    handleSubmit: function(formData) {
+        this.setState({
+            drawChart: true,
+            learningSet: formData.learningSet,
+            testingSet: formData.testingSet,
+            learningRate: formData.learningRate,
+            momentum: formData.momentum,
+            bipolar: formData.bipolar,
+            bias: formData.bias
+        });
+    },
     render: function() {
+        var chart = null;
+        if (this.state.drawChart) {
+            chart = <Chart
+                learningSet={this.state.learningSet}
+                testingSet={this.state.testingSet}
+                learningRate={this.state.learningRate}
+                momentum={this.state.momentum}
+                bipolar={this.state.bipolar}
+                bipolar={this.state.bipolar}
+                bias={this.state.bias}
+            />;
+        }
         return (
             <Grid>
                 <Row>
@@ -20,12 +48,10 @@ var App = React.createClass({
                 <Row>
                     <Col md={6}>
                         <h2>Settings</h2>
-                        <Form />
+                        <Form onSubmit={this.handleSubmit} />
                     </Col>
                     <Col md={6}>
-                        <h2>Results</h2>
-                        <Chart endpoint={"/api/regression/learning"} title="Learning" />
-                        <Chart endpoint={"/api/regression/testing"} title="Testing" />
+                    {chart}
                     </Col>
                 </Row>
             </Grid>

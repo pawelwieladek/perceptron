@@ -1,7 +1,8 @@
 var React = require("react");
 var Bootstrap = require("react-bootstrap");
-var _ = require("underscore");
 var UUID = require("node-uuid");
+var _ = require("underscore");
+var superagent = require("superagent");
 
 var Grid = Bootstrap.Grid;
 var Row = Bootstrap.Row;
@@ -15,39 +16,24 @@ var Chart = React.createClass({
         }
     },
     componentDidMount: function() {
-
-        var width = $(this.refs.testingChart.getDOMNode()).width();
-
-        d3.json(this.props.endpoint, function(data) {
-
-            var max_x = _.max(_.map(data, function(p) { return parseFloat(p.x); }));
-            var max_y = _.max(_.map(data, function(p) { return parseFloat(p.y); }));
-            var min_x = _.min(_.map(data, function(p) { return parseFloat(p.x); }));
-            var min_y = _.min(_.map(data, function(p) { return parseFloat(p.y); }));
-
-            data_graphic({
-                title: this.props.title,
-                data: data,
-                max_x: max_x,
-                max_y: max_y,
-                min_x: min_x,
-                min_y: min_y,
-                width: width,
-                height: 250,
-                target: "#" + this.state.uuid,
-                x_accessor: "x",
-                y_accessor: "y",
-                interpolate: "basic",
-                area: false
-            });
-        }.bind(this));
+        superagent
+            .post('/api/perceptron')
+            .send({ learningSet: this.props.learningSet })
+            .end(function(error, res){
+                this.setState({
+                    data: res.body
+                })
+            }.bind(this));
+    },
+    componentDidUpdate: function() {
+        console.log(this.state.data);
     },
     render: function() {
         return (
             <div>
                 <Row>
                     <Col md={12}>
-                        <div className="chart" id={this.state.uuid} ref="testingChart"></div>
+                        <div className="chart" id={this.state.uuid} ref="chart"></div>
                     </Col>
                 </Row>
             </div>

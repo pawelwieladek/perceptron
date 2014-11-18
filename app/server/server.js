@@ -2,29 +2,13 @@ var express = require('express');
 var app = express();
 var path = require("path");
 var _ = require("underscore");
+var parse = require("csv-parse");
 
-// API
-var RegressionProblem = require("../../lib/src/problems/regression");
-app.get('/api/regression/testing', function (req, res) {
-    var regression = new RegressionProblem();
-    regression.solve()
-        .then(function(results) {
-            var chart = [];
-            results.forEach(function(result) {
-                chart.push({
-                    x: result.input,
-                    y: result.output
-                });
-            });
-            res.send(chart);
-        });
-});
-app.get('/api/regression/learning', function (req, res) {
-    var regression = new RegressionProblem();
-    regression.getTrainingSet()
-        .then(function(points) {
-            res.send(points);
-        });
+var Perceptron = require("../../lib/src/perceptron");
+
+app.post('/api/perceptron', function (req, res) {
+    console.log(req.body);
+    res.send("ok");
 });
 
 // Static files
