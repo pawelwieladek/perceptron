@@ -21,9 +21,9 @@ var Form = React.createClass({
         var momentum = parseFloat(this.refs.momentum.getValue());
         var bipolar = this.refs.bipolar.getChecked();
         var bias = this.refs.bias.getChecked();
-        var activationFunction = this.refs.activationFunction.getChecked();
-        var numIterations = this.refs.numIterations.getChecked();
-        var problemType = this.refs.problemType.getChecked();
+        var activationFunction = this.refs.activationFunction.getValue();
+        var numIterations = parseInt(this.refs.numIterations.getValue());
+        var problemType = this.refs.problemType.getValue();
 
         var source = {};
         if (this.refs.sampleSource.getChecked()) {

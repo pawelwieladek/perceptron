@@ -21,6 +21,9 @@ var Chart = React.createClass({
             .post('/api/perceptron')
             .send({
                 source: params.source,
+                problemType: params.problemType,
+                numIterations: params.numIterations,
+                activationFunction: params.activationFunction,
                 learningRate: params.learningRate,
                 momentum: params.momentum,
                 bipolar: params.bipolar,

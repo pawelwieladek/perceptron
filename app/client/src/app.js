@@ -16,6 +16,7 @@ var App = React.createClass({
     },
     handleSubmit: function(formData) {
         this.setState({
+            drawChart: true,
             formData: formData
         });
     },
