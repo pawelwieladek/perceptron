@@ -10,7 +10,7 @@ var Button = Bootstrap.Button;
 var Form = React.createClass({
     getInitialState: function() {
         return {
-            showCustomSourceInput: false,
+            customSource: false,
             bipolar: true,
             bias: true
         }
@@ -26,11 +26,11 @@ var Form = React.createClass({
         var problemType = this.refs.problemType.getValue();
 
         var source = {};
-        if (this.refs.sampleSource.getChecked()) {
+        if (this.refs.source.getValue() === "sample") {
             source = {
                 name: "sample"
             };
-        } else if (this.refs.customSource.getChecked()) {
+        } else if (this.refs.source.getValue() === "custom") {
             source = {
                 name: "custom",
                 data: {
@@ -54,7 +54,7 @@ var Form = React.createClass({
         });
     },
     componentDidMount: function() {
-        this.setState({ showCustomSourceInput: this.refs.customSource.getChecked() });
+        this.setState({ customSource: this.refs.source.getValue() === "custom" });
     },
     handleBipolarChange: function() {
         this.setState({ bipolar: this.refs.bipolar.getChecked() });
@@ -63,11 +63,11 @@ var Form = React.createClass({
         this.setState({ bias: this.refs.bias.getChecked() });
     },
     handleSourceChange: function() {
-        this.setState({ showCustomSourceInput: this.refs.customSource.getChecked() });
+        this.setState({ customSource: this.refs.source.getValue() === "custom" });
     },
     render: function() {
         var customSource = null;
-        if (this.state.showCustomSourceInput) {
+        if (this.state.customSource) {
             customSource =
                 <div>
                     <Input type="textarea" ref="learningSet" label="Learning set" rows={5} />
@@ -81,16 +81,17 @@ var Form = React.createClass({
                 <h2>Settings</h2>
                 <Row>
                     <Col md={6}>
-                        <label>Data source</label>
-                        <Input type="radio" ref="sampleSource" label="Sample" name="source" onChange={this.handleSourceChange}/>
-                        <Input type="radio" ref="customSource" label="Custom" name="source" onChange={this.handleSourceChange}/>
-                        {customSource}
-                    </Col>
-                    <Col md={6}>
-                        <Input type="select" ref="problemType" label="Problem type" defaultValue="sigmoid">
+                        <Input type="select" ref="problemType" label="Problem type" defaultValue="regression">
                             <option value="regression">Regression</option>
                             <option value="classification">Classification</option>
                         </Input>
+                        <Input type="select" ref="source" label="Data source" defaultValue="sample" onChange={this.handleSourceChange}>
+                            <option value="sample">Sample</option>
+                            <option value="custom">Custom</option>
+                        </Input>
+                        {customSource}
+                    </Col>
+                    <Col md={6}>
                         <Input type="select" ref="activationFunction" label="Activation function"  defaultValue="sigmoid">
                             <option value="sigmoid">Sigmoid</option>
                             <option value="tanh">Tanh</option>
