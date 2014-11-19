@@ -16,7 +16,6 @@ var Chart = React.createClass({
         }
     },
     getData: function(params) {
-        console.log(params);
         superagent
             .post('/api/perceptron')
             .send({
