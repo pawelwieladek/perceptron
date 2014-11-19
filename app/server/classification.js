@@ -9,9 +9,12 @@ var Perceptron = require("../../lib/src/perceptron");
 function Problem(options) {
     this.learningData = [];
     this.testingData = [];
+    this.globalError = [];
     this.maxValue = 0;
     this.perceptron = null;
 
+    this.inputSize = options.inputSize;
+    this.outputSize = options.outputSize;
     this.learnFile = options.learnFile;
     this.testFile = options.testFile;
     this.numIterations = options.numIterations;
@@ -20,6 +23,7 @@ function Problem(options) {
     this.momentum = options.momentum;
     this.bipolar = options.bipolar;
     this.bias = options.bias;
+    this.hiddenLayers = options.hiddenLayers;
 }
 
 Problem.prototype = {
@@ -52,24 +56,43 @@ Problem.prototype = {
 
             var max = this.maxValue;
 
+            this.classes = _.map(this.learningData, function(x) { return x[this.inputSize] }.bind(this));
+            this.classes = _.uniq(this.classes);
+
             var learningSet = [];
             this.learningData.forEach(function(pattern) {
                 learningSet.push({
-                    input: _.map(pattern.slice(0, 1), function(x) { return x / max }),
-                    output: _.map(pattern.slice(1, 2), function(x) { return x / max })
+                    input: _.map(pattern.slice(0, this.inputSize), function(x) { return x / max }),
+                    output: _.map(this.classes, function(className) { return pattern[this.inputSize] == className ? 1.0 : 0.0}.bind(this))
                 })
-            });
+            }.bind(this));
+
+            var hiddenLayers = this.hiddenLayers.split(",");
+            hiddenLayers = _.map(hiddenLayers, function(x) { return parseInt(x); });
 
             this.perceptron = new Perceptron({
                 bias: this.bias,
                 bipolar: this.bipolar,
                 learningRate: this.learningRate,
                 momentum: this.momentum,
-                activation: this.activationFunction
+                activation: this.activationFunction,
+                hiddenLayers: hiddenLayers
             });
 
+            learningSet = _.shuffle(learningSet);
+
             this.perceptron.train(learningSet, {
-                iterations: this.numIterations
+                iterations: this.numIterations,
+                errorThreshold: this.errorThreshold,
+                log: true,
+                logPeriod: 1000,
+                callbackPeriod: 1,
+                callback: function(info) {
+                    this.globalError.push({
+                        iteration: info.iterations,
+                        error: info.error
+                    });
+                }.bind(this)
             });
 
         }.bind(this));
@@ -84,10 +107,9 @@ Problem.prototype = {
 
             var results = [];
             testingSet.forEach(function(test) {
-                var result = _.map(this.perceptron.run(test), function(x) {
-                    return x * max;
-                });
-                results.push(result);
+                var result = this.perceptron.run(test);
+                var output = this.classes[_.indexOf(result, _.max(result))];
+                results.push(output);
             }.bind(this));
 
             results = _.zip(this.testingData, results);
@@ -95,18 +117,24 @@ Problem.prototype = {
             results = _.map(results, function(result) {
                 return {
                     x: result[0][0],
-                    y: result[1][0]
+                    y: result[0][1],
+                    z: result[1]
                 }
             });
 
             var learningData = _.map(this.learningData, function(learn) {
                 return {
                     x: learn[0],
-                    y: learn[1]
+                    y: learn[1],
+                    z: learn[2]
                 }
             });
 
-            return [learningData, results];
+            return {
+                learningData: learningData,
+                results: results,
+                globalError: this.globalError
+            };
 
         }.bind(this));
     },

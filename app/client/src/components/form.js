@@ -24,6 +24,8 @@ var Form = React.createClass({
         var activationFunction = this.refs.activationFunction.getValue();
         var numIterations = parseInt(this.refs.numIterations.getValue());
         var problemType = this.refs.problemType.getValue();
+        var hiddenLayers = this.refs.hiddenLayers.getValue();
+        var errorThreshold = parseFloat(this.refs.errorThreshold.getValue());
 
         var source = {};
         if (this.refs.source.getValue() === "sample") {
@@ -50,7 +52,9 @@ var Form = React.createClass({
             learningRate: learningRate,
             momentum: momentum,
             bipolar: bipolar,
-            bias: bias
+            bias: bias,
+            hiddenLayers: hiddenLayers,
+            errorThreshold: errorThreshold
         });
     },
     componentDidMount: function() {
@@ -96,7 +100,9 @@ var Form = React.createClass({
                             <option value="sigmoid">Sigmoid</option>
                             <option value="tanh">Tanh</option>
                         </Input>
+                        <Input type="text" ref="hiddenLayers" label="Hidden layers" defaultValue="3" />
                         <Input type="number" ref="numIterations" label="Number of iterations" defaultValue="2000" />
+                        <Input type="number" ref="errorThreshold" label="Error threshold" step="0.00001" max="0.1" min="0.0" defaultValue="0.0001" />
                         <Input type="number" ref="learningRate" label="Learning Rate" step="0.1" max="1.0" min="0.0" defaultValue="0.3" />
                         <Input type="number" ref="momentum" label="Momentum" step="0.1" max="1.0" min="0.0" defaultValue="0.1" />
                         <Input type="checkbox" ref="bipolar" label="Bipolar" checked={this.state.bipolar} onChange={this.handleBipolarChange} />

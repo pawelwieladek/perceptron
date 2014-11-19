@@ -4,7 +4,8 @@ var bodyParser = require('body-parser');
 var path = require("path");
 
 var Perceptron = require("../../lib/src/perceptron");
-var Problem = require("./problem");
+var Regression = require("./regression");
+var Classification = require("./classification");
 
 // Parse request body
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,30 +23,62 @@ app.post('/api/perceptron', function (request, response) {
             classification: {
                 learn: "../resources/classification.learn.csv",
                 test: "../resources/classification.test.csv"
+            },
+            square: {
+                learn: "../resources/square.learn.csv",
+                test: "../resources/square.test.csv"
             }
         };
 
         var learnFile = null;
         var testFile = null;
+        var inputSize = null;
+        var outputSize = null;
+
+        var problem;
 
         if (request.body.problemType === "regression") {
             learnFile = samples.regression.learn;
             testFile = samples.regression.test;
+            inputSize = 1;
+            outputSize = 1;
+
+            problem = new Regression({
+                inputSize: inputSize,
+                outputSize: outputSize,
+                learnFile: learnFile,
+                testFile: testFile,
+                activationFunction: request.body.activationFunction,
+                numIterations: request.body.numIterations,
+                learningRate: request.body.learningRate,
+                momentum: request.body.momentum,
+                bipolar: request.body.bipolar,
+                bias: request.body.bias,
+                hiddenLayers: request.body.hiddenLayers,
+                errorThreshold: request.body.errorThreshold
+            });
+
         } else if (request.body.problemType === "classification") {
             learnFile = samples.classification.learn;
             testFile = samples.classification.test;
-        }
+            inputSize = 2;
+            outputSize = 1;
 
-        var problem = new Problem({
-            learnFile: learnFile,
-            testFile: testFile,
-            activationFunction: request.body.activationFunction,
-            numIterations: request.body.numIterations,
-            learningRate: request.body.learningRate,
-            momentum: request.body.momentum,
-            bipolar: request.body.bipolar,
-            bias: request.body.bias
-        });
+            problem = new Classification({
+                inputSize: inputSize,
+                outputSize: outputSize,
+                learnFile: learnFile,
+                testFile: testFile,
+                activationFunction: request.body.activationFunction,
+                numIterations: request.body.numIterations,
+                learningRate: request.body.learningRate,
+                momentum: request.body.momentum,
+                bipolar: request.body.bipolar,
+                bias: request.body.bias,
+                hiddenLayers: request.body.hiddenLayers,
+                errorThreshold: request.body.errorThreshold
+            });
+        }
 
         problem.solve()
             .then(function(output) {

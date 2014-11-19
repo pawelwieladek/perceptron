@@ -12,7 +12,7 @@ var Input = Bootstrap.Input;
 var Chart = React.createClass({
     getInitialState: function() {
         return {
-            uuid: "chart" + UUID.v4()
+            uuid: UUID.v4()
         }
     },
     getData: function(params) {
@@ -26,7 +26,9 @@ var Chart = React.createClass({
                 learningRate: params.learningRate,
                 momentum: params.momentum,
                 bipolar: params.bipolar,
-                bias: params.bias
+                bias: params.bias,
+                hiddenLayers: params.hiddenLayers,
+                errorThreshold: params.errorThreshold
             })
             .type('application/json')
             .end(function(error, res){
@@ -44,15 +46,58 @@ var Chart = React.createClass({
     componentDidUpdate: function() {
         var data = this.state.data;
         var width = $(this.refs.chart.getDOMNode()).width();
+        $('.chart').children().remove();
+
+        if(this.props.formData.problemType === "regression") {
+            data_graphic({
+                title: "Results",
+                data: [data.learningData, data.results],
+                width: width,
+                height: 250,
+                target: "#results" + this.state.uuid,
+                x_accessor: "x",
+                y_accessor: "y",
+                interpolate: "basic",
+                area: false
+            });
+        } else if(this.props.formData.problemType === "classification") {
+            data_graphic({
+                title: "Learning",
+                data: data.learningData,
+                width: width,
+                height: 250,
+                target: "#learn" + this.state.uuid,
+                chart_type: 'point',
+                x_accessor: "x",
+                y_accessor: "y",
+                color_accessor: "z",
+                interpolate: "basic",
+                area: false
+            });
+
+            data_graphic({
+                title: "Testing",
+                data: data.results,
+                width: width,
+                height: 250,
+                target: "#results" + this.state.uuid,
+                chart_type: 'point',
+                x_accessor: "x",
+                y_accessor: "y",
+                color_accessor: "z",
+                interpolate: "basic",
+                area: false
+            });
+        }
 
         data_graphic({
-            title: this.props.title,
-            data: data,
+            title: "Global error",
+            data: data.globalError,
             width: width,
             height: 250,
-            target: "#" + this.state.uuid,
-            x_accessor: "x",
-            y_accessor: "y",
+            target: "#error" + this.state.uuid,
+            x_accessor: "iteration",
+            y_accessor: "error",
             interpolate: "basic",
             area: false
         });
@@ -62,7 +107,9 @@ var Chart = React.createClass({
             <div>
                 <Row>
                     <Col md={12}>
-                        <div className="chart" id={this.state.uuid} ref="chart"></div>
+                        <div className="chart" id={"learn" + this.state.uuid} ref="chart"></div>
+                        <div className="chart" id={"results" + this.state.uuid} ref="chart"></div>
+                        <div className="chart" id={"error" + this.state.uuid} ref="chart"></div>
                     </Col>
                 </Row>
             </div>
