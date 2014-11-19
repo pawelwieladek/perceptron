@@ -46,7 +46,6 @@ var Chart = React.createClass({
     componentDidUpdate: function() {
         var data = this.state.data;
         var width = $(this.refs.chart.getDOMNode()).width();
-        $('.chart').children().remove();
 
         if(this.props.formData.problemType === "regression") {
             data_graphic({
