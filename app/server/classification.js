@@ -81,11 +81,13 @@ Problem.prototype = {
 
             learningSet = _.shuffle(learningSet);
 
+            console.log("Learning started...");
+
             this.perceptron.train(learningSet, {
                 iterations: this.numIterations,
                 errorThreshold: this.errorThreshold,
                 log: true,
-                logPeriod: 1000,
+                logPeriod: 100,
                 callbackPeriod: 1,
                 callback: function(info) {
                     this.globalError.push({
@@ -94,6 +96,8 @@ Problem.prototype = {
                     });
                 }.bind(this)
             });
+
+            console.log("Learning done.");
 
         }.bind(this));
     },
@@ -105,12 +109,16 @@ Problem.prototype = {
                 return _.map(test, function(x) { return x / max } )
             });
 
+            console.log("Testing started...");
+
             var results = [];
             testingSet.forEach(function(test) {
                 var result = this.perceptron.run(test);
                 var output = this.classes[_.indexOf(result, _.max(result))];
                 results.push(output);
             }.bind(this));
+
+            console.log("Testing done.");
 
             results = _.zip(this.testingData, results);
 

@@ -24,9 +24,21 @@ app.post('/api/perceptron', function (request, response) {
                 learn: "../resources/classification.learn.csv",
                 test: "../resources/classification.test.csv"
             },
-            square: {
-                learn: "../resources/square.learn.csv",
-                test: "../resources/square.test.csv"
+            activation: {
+                learn: "../resources/data.activation.train.1000.csv",
+                test: "../resources/data.activation.test.1000.csv"
+            },
+            multimodal: {
+                learn: "../resources/data.multimodal.train.1000.csv",
+                test: "../resources/data.multimodal.test.1000.csv"
+            },
+            noisyxor: {
+                learn: "../resources/data.noisyXOR.train.1000.csv",
+                test: "../resources/data.noisyXOR.test.1000.csv"
+            },
+            circles: {
+                learn: "../resources/data.circles.train.1000.csv",
+                test: "../resources/data.circles.test.1000.csv"
             }
         };
 
@@ -58,9 +70,91 @@ app.post('/api/perceptron', function (request, response) {
                 errorThreshold: request.body.errorThreshold
             });
 
+        } else if (request.body.problemType === "activation") {
+            learnFile = samples.activation.learn;
+            testFile = samples.activation.test;
+            inputSize = 1;
+            outputSize = 1;
+
+            problem = new Regression({
+                inputSize: inputSize,
+                outputSize: outputSize,
+                learnFile: learnFile,
+                testFile: testFile,
+                activationFunction: request.body.activationFunction,
+                numIterations: request.body.numIterations,
+                learningRate: request.body.learningRate,
+                momentum: request.body.momentum,
+                bipolar: request.body.bipolar,
+                bias: request.body.bias,
+                hiddenLayers: request.body.hiddenLayers,
+                errorThreshold: request.body.errorThreshold
+            });
+
+        } else if (request.body.problemType === "multimodal") {
+            learnFile = samples.multimodal.learn;
+            testFile = samples.multimodal.test;
+            inputSize = 1;
+            outputSize = 1;
+
+            problem = new Regression({
+                inputSize: inputSize,
+                outputSize: outputSize,
+                learnFile: learnFile,
+                testFile: testFile,
+                activationFunction: request.body.activationFunction,
+                numIterations: request.body.numIterations,
+                learningRate: request.body.learningRate,
+                momentum: request.body.momentum,
+                bipolar: request.body.bipolar,
+                bias: request.body.bias,
+                hiddenLayers: request.body.hiddenLayers,
+                errorThreshold: request.body.errorThreshold
+            });
+
         } else if (request.body.problemType === "classification") {
             learnFile = samples.classification.learn;
             testFile = samples.classification.test;
+            inputSize = 2;
+            outputSize = 1;
+
+            problem = new Classification({
+                inputSize: inputSize,
+                outputSize: outputSize,
+                learnFile: learnFile,
+                testFile: testFile,
+                activationFunction: request.body.activationFunction,
+                numIterations: request.body.numIterations,
+                learningRate: request.body.learningRate,
+                momentum: request.body.momentum,
+                bipolar: request.body.bipolar,
+                bias: request.body.bias,
+                hiddenLayers: request.body.hiddenLayers,
+                errorThreshold: request.body.errorThreshold
+            });
+        } else if (request.body.problemType === "noisyxor") {
+            learnFile = samples.noisyxor.learn;
+            testFile = samples.noisyxor.test;
+            inputSize = 2;
+            outputSize = 1;
+
+            problem = new Classification({
+                inputSize: inputSize,
+                outputSize: outputSize,
+                learnFile: learnFile,
+                testFile: testFile,
+                activationFunction: request.body.activationFunction,
+                numIterations: request.body.numIterations,
+                learningRate: request.body.learningRate,
+                momentum: request.body.momentum,
+                bipolar: request.body.bipolar,
+                bias: request.body.bias,
+                hiddenLayers: request.body.hiddenLayers,
+                errorThreshold: request.body.errorThreshold
+            });
+        } else if (request.body.problemType === "circles") {
+            learnFile = samples.circles.learn;
+            testFile = samples.circles.test;
             inputSize = 2;
             outputSize = 1;
 

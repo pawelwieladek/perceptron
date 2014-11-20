@@ -82,7 +82,7 @@ Problem.prototype = {
                 iterations: this.numIterations,
                 errorThreshold: this.errorThreshold,
                 log: true,
-                logPeriod: 1000,
+                logPeriod: 100,
                 callbackPeriod: 1,
                 callback: function(info) {
                     this.globalError.push({

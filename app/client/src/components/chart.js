@@ -47,7 +47,7 @@ var Chart = React.createClass({
         var data = this.state.data;
         var width = $(this.refs.chart.getDOMNode()).width();
 
-        if(this.props.formData.problemType === "regression") {
+        if(_.contains(["regression", "activation", "multimodal"], this.props.formData.problemType)) {
             data_graphic({
                 title: "Results",
                 data: [data.learningData, data.results],
@@ -59,7 +59,7 @@ var Chart = React.createClass({
                 interpolate: "basic",
                 area: false
             });
-        } else if(this.props.formData.problemType === "classification") {
+        } else if(_.contains(["classification", "noisyxor", "circles"], this.props.formData.problemType)) {
             data_graphic({
                 title: "Learning",
                 data: data.learningData,

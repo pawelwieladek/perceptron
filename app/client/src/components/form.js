@@ -88,6 +88,10 @@ var Form = React.createClass({
                         <Input type="select" ref="problemType" label="Problem type" defaultValue="regression">
                             <option value="regression">Regression</option>
                             <option value="classification">Classification</option>
+                            <option value="noisyxor">Noisy XOR</option>
+                            <option value="circles">Circles</option>
+                            <option value="activation">Activation</option>
+                            <option value="multimodal">Multimodal</option>
                         </Input>
                         <Input type="select" ref="source" label="Data source" defaultValue="sample" onChange={this.handleSourceChange}>
                             <option value="sample">Sample</option>
