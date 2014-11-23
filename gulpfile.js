@@ -12,6 +12,10 @@ var paths = {
             src: "./app/client/src",
             dist: "./app/client/dist"
         },
+        bower: {
+            src: "./bower_components",
+            dist: "./app/client/dist/bower_components"
+        },
         server: "./app/server"
     },
     lib: {
@@ -33,6 +37,16 @@ gulp.task("html", function () {
         .pipe(gulp.dest(paths.app.client.dist));
 });
 
+gulp.task("images", function () {
+    return gulp.src(paths.app.client.src + "/images/**")
+        .pipe(gulp.dest(paths.app.client.dist + "/images"));
+});
+
+gulp.task("bower", function () {
+    return gulp.src(paths.app.bower.src + "/**")
+        .pipe(gulp.dest(paths.app.bower.dist));
+});
+
 gulp.task('styles', function () {
     gulp.src(paths.app.client.src + "/**/*.less")
         .pipe(less())
@@ -46,9 +60,23 @@ gulp.task("scripts", function () {
         .pipe(gulp.dest(paths.app.client.dist))
 });
 
-gulp.task("build", ["html", "styles", "scripts"]);
+gulp.task("build", ["bower", "html", "styles", "scripts", "images"]);
 
 gulp.task("serve", ["build"], function () {
+    //start the server at the beginning of the task
+    server.run({
+        file: paths.app.server + "/server.js"
+    });
+
+    //restart the server when file changes
+    gulp.watch([paths.app.client.src + "**/*.html"], ["html", server.run]);
+    gulp.watch([paths.app.client.src + "/**/*.js"], ["scripts", server.run]);
+    gulp.watch([paths.app.client.src + "/**/*.less"], ["styles", server.run]);
+    gulp.watch([paths.lib.src + "/**/*.js"], ["test", server.run]);
+    gulp.watch([paths.app.server + "/server.js"], [server.run]);
+});
+
+gulp.task("serve-dev", function () {
     //start the server at the beginning of the task
     server.run({
         file: paths.app.server + "/server.js"

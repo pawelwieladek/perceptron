@@ -1,4 +1,5 @@
 .idea/
 node_modules/
+bower_components/
 app/client/dist
 npm-debug.log

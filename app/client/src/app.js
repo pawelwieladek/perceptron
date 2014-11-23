@@ -1,22 +1,51 @@
-var superagent = require("superagent");
+var React = require("react");
+var Bootstrap = require("react-bootstrap");
+var Grid = Bootstrap.Grid;
+var Row = Bootstrap.Row;
+var Col = Bootstrap.Col;
+var Input = Bootstrap.Input;
 
-require("d3");
-require("nvd3");
+var Form = require("./components/form");
+var Chart = require("./components/chart");
 
-nv.addGraph(function() {
-    var chart = nv.models.scatterChart()
-        .interactive(false)
-        .color(d3.scale.category10().range());
-
-    //Axis settings
-    chart.xAxis.tickFormat(d3.format('.02f'));
-    chart.yAxis.tickFormat(d3.format('.02f'));
-
-    superagent.get("/api/regression", function(res) {
-        d3.select('#chart svg')
-            .datum(res.body)
-            .call(chart);
-    });
-
-    return chart;
+var App = React.createClass({
+    getInitialState: function() {
+        return {
+            drawChart: false
+        }
+    },
+    handleSubmit: function(formData) {
+        this.setState({
+            drawChart: true,
+            formData: formData
+        });
+    },
+    render: function() {
+        var chart = null;
+        if (this.state.drawChart) {
+            chart = <Chart formData={this.state.formData} />;
+        }
+        return (
+            <Grid>
+                <Row>
+                    <Col md={12}>
+                        <h1>Perceptron.js</h1>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={6}>
+                        <Form onSubmit={this.handleSubmit} />
+                    </Col>
+                    <Col md={6}>
+                    {chart}
+                    </Col>
+                </Row>
+            </Grid>
+        );
+    }
 });
+
+React.render(
+    <App />,
+    document.body
+);
