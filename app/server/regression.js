@@ -53,6 +53,8 @@ Problem.prototype = {
     trainNetwork: function() {
         return Q.fcall(function() {
             this.maxValue = Math.abs(_.max(_.flatten(this.learningData.concat(this.testingData))));
+            this.minValue = Math.abs(_.min(_.flatten(this.learningData.concat(this.testingData))));
+            this.maxValue = Math.max(this.maxValue,this.minValue);
 
             var max = this.maxValue;
 
